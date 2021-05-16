@@ -13,21 +13,35 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPFExample
+namespace PortfolioTracker
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainViewModel ViewModel {set; get;}
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
+        int test = 0;
+        private async void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            lstTickers.Items.Add("DOGE");
+            string ticker = (test++ % 2 == 0) ? "BTC" : "VTC";
+            if (await ViewModel.Supports(ticker))
+            {
+                lstTickers.Items.Add(ticker);
+            }
+        }
+
+        private async void lstTickers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selected = (string) lstTickers.Items[lstTickers.SelectedIndex];
+            TickerSymbol.Content = selected;
+            TickerName.Content = await ViewModel.GetName(selected);
+            TickerPrice.Content = $"${await ViewModel.GetPrice(selected):0.00}";
         }
     }
 }
