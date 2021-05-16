@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-using HtmlAgilityPack;
 using System.Text.Json.Serialization;
 
 namespace PortfolioTracker.TickerFetchers
 {
     /// <summary>
-    ///     Fetch crypto ticker information from CoinMarketCap.
+    ///     Fetch crypto ticker information from CoinGecko.
     /// </summary>
     class CoinGeckoFetcher : ITickerFetcher
     {
