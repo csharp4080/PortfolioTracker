@@ -26,28 +26,16 @@ namespace PortfolioTracker
         Task<bool> Supports(string ticker);
         
         /// <summary>
-        ///     Retrieve the current price of the asset
+        ///     Retrieve all the market data of the asset
         ///     specified by the ticker.
         /// </summary>
         /// <param name="ticker">
-        ///     The ticker to check the price of.
+        ///     The ticker to check the data of.
         /// </param>
         /// <returns>
-        ///     A Task that will hold the current price
+        ///     A Task that will hold the current info
         ///     if the lookup was successful.
         /// </returns>
-        Task<double> GetPrice(string ticker);
-
-        /// <summary>
-        ///     Retrieve the full name of the asset or company
-        ///     represented by the ticker.
-        /// </summary>
-        /// <param name="ticker">
-        ///     The ticker symbol.
-        /// </param>
-        /// <returns>
-        ///     The full name of the asset or company.
-        /// </returns>
-        Task<string> GetName(string ticker);
+        Task<MarketData> GetMarketData(string ticker);
     }
 }

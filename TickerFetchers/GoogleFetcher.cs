@@ -8,8 +8,7 @@ using HtmlAgilityPack;
 
 
 namespace PortfolioTracker.TickerFetchers
-{
-    class GoogleFetcher : ITickerFetcher
+{    class GoogleFetcher : ITickerFetcher
     {
         private const string URL = "https://www.google.com/finance/quote/";
         //private readonly string[] exchanges = { "NASDAQ", "NYSE" };
@@ -53,7 +52,7 @@ namespace PortfolioTracker.TickerFetchers
             return false;
         }
 
-        public async Task<double> GetPrice(string ticker)
+        public async Task<MarketData> GetMarketData(string ticker)
         {
             try
             {
@@ -72,70 +71,33 @@ namespace PortfolioTracker.TickerFetchers
                     html = await httpClient.GetStringAsync(request);
                     htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(html);
-
-                    //Pull price as string
-                    string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
-
-                    //Remove the $ from string
-                    price = price.Remove(0, 1);
-
-                    //Return price as double
-                    return Convert.ToDouble(price);
                 }
 
-                else
-                {
-                    //Pull price as string
-                    string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
+                string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
+                string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
 
-                    //Remove the $ from string
-                    price = price.Remove(0, 1);
+                var node = htmlDoc.DocumentNode.SelectSingleNode("//h2[@class'yV3rjd']");
 
-                    //Return price as double
-                    return Convert.ToDouble(price);
-                }
+                node = node.NextSibling;
+                node = node.NextSibling;
+
+                string dayrange = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+
+                node = node.NextSibling;
+                node = node.NextSibling;
+
+                string marketcap = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+
+                node = node.NextSibling;
+
+                string volume = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+
 
             }
             catch (Exception) { }
 
-            return 0.0;
-        }
-
-        public async Task<string> GetName(string ticker)
-        {
-            try
-            {
-                //Check NASDAQ first
-                HttpClient httpClient = new HttpClient();
-                string request = $"{URL}{ticker}:NASDAQ";
-                var html = await httpClient.GetStringAsync(request);
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(html);
-                var check = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']");
-
-                //If NASDAQ fails, check NYSE
-                if (check == null)
-                {
-                    request = $"{URL}{ticker}:NYSE";
-                    html = await httpClient.GetStringAsync(request);
-                    htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(html);
-
-                    string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
-
-                    return name;
-                }
-
-                else
-                {
-                    string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
-
-                    return name;
-                }
-            }
-            catch (Exception) { }
-
-            return "Error";
+            MarketData md = new MarketData("", 0, 0, 0, 0, 0);
+            return md;
         }
     }
 }
