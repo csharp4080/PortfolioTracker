@@ -75,9 +75,8 @@ namespace PortfolioTracker.TickerFetchers
                     marketData.price = double.Parse(htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText.Replace("$", ""));
                     HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[@class='P6K39c']");
                     
-                    string dayrange = nodes[6].InnerText;
-                    string marketcap = nodes[8].InnerText;
-                    string volume = nodes[9].InnerText;
+                    string dayrange = nodes[1].InnerText;
+                    string volume = nodes[3].InnerText;
 
                     string[] range = dayrange.Split(' ');
                     range[0].Remove(0, 1);
@@ -86,8 +85,22 @@ namespace PortfolioTracker.TickerFetchers
                     marketData.dayrangehigh = Convert.ToDouble(range[2].Replace("$", ""));
                     marketData.dayrangelow = Convert.ToDouble(range[0].Replace("$", ""));
 
+                    char mult = volume[volume.Length - 1];
+                    volume.Remove(volume.Length - 1);
+                    double vol = Convert.ToDouble(volume.Replace("$", ""));
+
+                    if (mult == 'M')
+                        vol = vol * 1000000;
+
+                    if (mult == 'B')
+                        vol = vol * 1000000000;
+
+                    marketData.tradingvolume = vol;
+
+                    string marketcap = nodes[2].InnerText;
+
                     string[] market = marketcap.Split(' ');
-                    char mult = market[0][market[0].Length - 1];
+                    mult = market[0][market[0].Length - 1];
                     marketcap = market[0].Remove(market[0].Length - 1);
 
                     double mc = Convert.ToDouble(marketcap.Replace("$", ""));
@@ -99,18 +112,6 @@ namespace PortfolioTracker.TickerFetchers
                         mc = mc * 1000000000;
 
                     marketData.marketcap = mc;
-
-                    mult = volume[volume.Length - 1];
-                    volume.Remove(volume.Length - 1);
-                    double vol = Convert.ToDouble(volume.Replace("$", ""));
-
-                    if (mult == 'M')
-                        vol = vol * 1000000;
-
-                    if (mult == 'B')
-                        vol = vol * 1000000000;
-
-                    marketData.tradingvolume = vol;
                     
                     break;
                 }
