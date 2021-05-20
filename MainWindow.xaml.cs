@@ -118,14 +118,6 @@ namespace PortfolioTracker
             ViewModel.SaveDataFile();
         }
 
-        private void ButtonRemoveTicker_Click(object sender, RoutedEventArgs e)
-        {
-            if (lstTickers.SelectedIndex >= 0)
-            {
-                ViewModel.TrackedTickers.RemoveAt(lstTickers.SelectedIndex);
-            }
-        }
-
         private void RemoveTicker(Ticker ticker)
         {
             if (ticker != null)
@@ -137,6 +129,18 @@ namespace PortfolioTracker
         private void ModifyTicker(object sender, RoutedEventArgs e)
         {
             EnterNewTickerView();
+        }
+
+        private void ButtonRemoveTicker_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            int index = lstTickers.Items.IndexOf(button.DataContext);
+            ViewModel.TrackedTickers.RemoveAt(index);
+        }
+
+        private void ButtonModifyTicker_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
