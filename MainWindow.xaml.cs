@@ -31,14 +31,7 @@ namespace PortfolioTracker
 
         private void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            // Disable Add Button
-            ButtonAddTicker.IsEnabled = false;
-            // Close Market View
-            MarketData.IsEnabled = false;
-            MarketData.Visibility = Visibility.Hidden;
-            // Open New Ticker View
-            AddTicker.Visibility = Visibility.Visible;
-            AddTicker.IsEnabled = true;
+            EnterNewTickerView();
         }
 
         private void ButtonCancelNewTicker_Click(object sender, RoutedEventArgs e)
@@ -64,6 +57,18 @@ namespace PortfolioTracker
                 ViewModel.TrackedTickers.Add(ticker);
                 ExitNewTickerView();
             }
+        }
+
+        private void EnterNewTickerView()
+        {
+            // Disable Add Button
+            ButtonAddTicker.IsEnabled = false;
+            // Close Market View
+            MarketData.IsEnabled = false;
+            MarketData.Visibility = Visibility.Hidden;
+            // Open New Ticker View
+            AddTicker.Visibility = Visibility.Visible;
+            AddTicker.IsEnabled = true;
         }
 
         private void ExitNewTickerView()
@@ -110,9 +115,17 @@ namespace PortfolioTracker
             }
         }
 
-        private void ButtonModifyTicker_Click(object sender, RoutedEventArgs e)
+        private void RemoveTicker(Ticker ticker)
         {
+            if (ticker != null)
+            {
+                ViewModel.TrackedTickers.Remove(ticker);
+            }
+        }
 
+        private void ModifyTicker(object sender, RoutedEventArgs e)
+        {
+            EnterNewTickerView();
         }
     }
 }

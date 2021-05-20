@@ -8,12 +8,12 @@ namespace PortfolioTracker.TickerFetchers
 {
     public struct MarketData
     {
-        public string name;
-        public double price;
-        public double marketcap;
-        public double dayrangehigh;
-        public double dayrangelow;
-        public double tradingvolume;
+        public string name { get; set; }
+        public double price { get; set; }
+        public double marketcap { get; set; }
+        public double dayrangehigh { get; set; }
+        public double dayrangelow { get; set; }
+        public double tradingvolume { get; set; }
 
         public MarketData(string n, double p, double m, double rh, double rl, double v)
         {

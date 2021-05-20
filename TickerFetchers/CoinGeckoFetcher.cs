@@ -29,45 +29,28 @@ namespace PortfolioTracker.TickerFetchers
         {
             return await GetListing(ticker) != null;
         }
-
-
         public async Task<MarketData> GetMarketData(string ticker)
         {
+            MarketData marketData = new MarketData();
+            // Get Unique API ID For Ticker
             CoinGeckoListing listing = await GetListing(ticker);
             if (listing == null)
             {
-            //    return 0.0;
+                return marketData;
             }
+            // Request Coin Information
             HttpClient httpClient = new HttpClient();
             string request = $"{API_URL}/coins/{listing.ID}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
             JsonDocument response = JsonDocument.Parse(await httpClient.GetStringAsync(request));
-            //return response.RootElement.GetProperty("market_data").GetProperty("current_price").GetProperty("usd").GetDouble();
-
-            MarketData md = new MarketData("", 0, 0, 0, 0, 0);
-
-            return md;
-        }
-        public async Task<double> GetPrice(string ticker)
-        {
-            CoinGeckoListing listing = await GetListing(ticker);
-            if (listing == null)
-            {
-                return 0.0;
-            }
-            HttpClient httpClient = new HttpClient();
-            string request = $"{API_URL}/coins/{listing.ID}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
-            JsonDocument response = JsonDocument.Parse(await httpClient.GetStringAsync(request));
-            return response.RootElement.GetProperty("market_data").GetProperty("current_price").GetProperty("usd").GetDouble();
-        }
-
-        public async Task<string> GetName(string ticker)
-        {
-            CoinGeckoListing listing = await GetListing(ticker);
-            if (listing == null)
-            {
-                return "Error";
-            }
-            return listing.Name;
+            JsonElement jsonMarketData = response.RootElement.GetProperty("market_data");
+            // Extract Market Data From Response
+            marketData.name = listing.Name;
+            marketData.price = jsonMarketData.GetProperty("current_price").GetProperty("usd").GetDouble();
+            marketData.marketcap = jsonMarketData.GetProperty("market_cap").GetProperty("usd").GetDouble();
+            marketData.dayrangehigh = jsonMarketData.GetProperty("high_24h").GetProperty("usd").GetDouble();
+            marketData.dayrangelow = jsonMarketData.GetProperty("low_24h").GetProperty("usd").GetDouble();
+            marketData.tradingvolume = jsonMarketData.GetProperty("total_volume").GetProperty("usd").GetDouble();
+            return marketData;
         }
 
         private async Task<CoinGeckoListing> GetListing(string ticker)
