@@ -12,11 +12,10 @@ namespace PortfolioTracker.TickerFetchers
     class GoogleFetcher : ITickerFetcher
     {
         private const string URL = "https://www.google.com/finance/quote/";
-        //private readonly string[] exchanges = { "NASDAQ", "NYSE" };
+        private readonly string[] exchanges = { "NASDAQ", "NYSE" };
 
         public async Task<bool> Supports(string ticker)
         {
-
             try
             {
                 //Check NASDAQ first
@@ -55,71 +54,71 @@ namespace PortfolioTracker.TickerFetchers
 
         public async Task<MarketData> GetMarketData(string ticker)
         {
-            try
+            MarketData marketData = new();
+            HttpClient httpClient = new();
+            foreach (string exchange in exchanges)
             {
-                //Check NASDAQ first
-                HttpClient httpClient = new HttpClient();
-                string request = $"{URL}{ticker}:NASDAQ";
-                var html = await httpClient.GetStringAsync(request);
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(html);
-                var check = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']");
-
-                //If NASDAQ fails, check NYSE
-                if (check == null)
+                try
                 {
-                    request = $"{URL}{ticker}:NYSE";
-                    html = await httpClient.GetStringAsync(request);
-                    htmlDoc = new HtmlDocument();
+                    // Get HTML Document
+                    string request = $"{URL}{ticker}:{exchange}";
+                    string html = await httpClient.GetStringAsync(request);
+                    HtmlDocument htmlDoc = new();
                     htmlDoc.LoadHtml(html);
+                    // Pull Ticker Information
+                    HtmlNode nameNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']");
+                    if (nameNode == null)
+                    {
+                        continue;
+                    }
+                    marketData.name = nameNode.InnerText;
+                    marketData.price = double.Parse(htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText.Replace("$", ""));
+                    HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[@class='P6K39c']");
+                    
+                    string dayrange = nodes[6].InnerText;
+                    string marketcap = nodes[8].InnerText;
+                    string volume = nodes[9].InnerText;
+
+                    string[] range = dayrange.Split(' ');
+                    range[0].Remove(0, 1);
+                    range[2].Remove(0, 1);
+
+                    marketData.dayrangehigh = Convert.ToDouble(range[2].Replace("$", ""));
+                    marketData.dayrangelow = Convert.ToDouble(range[0].Replace("$", ""));
+
+                    string[] market = marketcap.Split(' ');
+                    char mult = market[0][market[0].Length - 1];
+                    marketcap = market[0].Remove(market[0].Length - 1);
+
+                    double mc = Convert.ToDouble(marketcap.Replace("$", ""));
+
+                    if (mult == 'M')
+                        mc = mc * 1000000;
+
+                    if (mult == 'B')
+                        mc = mc * 1000000000;
+
+                    marketData.marketcap = mc;
+
+                    mult = volume[volume.Length - 1];
+                    volume.Remove(volume.Length - 1);
+                    double vol = Convert.ToDouble(volume.Replace("$", ""));
+
+                    if (mult == 'M')
+                        vol = vol * 1000000;
+
+                    if (mult == 'B')
+                        vol = vol * 1000000000;
+
+                    marketData.tradingvolume = vol;
+                    
+                    break;
                 }
-
-                string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
-                string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
-
-                HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[@class='P6K39c']");
-
-                string dayrange = nodes[6].InnerText;
-                string marketcap = nodes[8].InnerText;
-                string volume = nodes[9].InnerText;
-
-                price = price.Remove(0, 1);
-
-                string[] range = dayrange.Split(' ');
-                range[0].Remove(0, 1);
-                range[2].Remove(0, 1);
-
-                string[] market = marketcap.Split(' ');
-                char mult = market[0][market[0].Length - 1];
-                marketcap = market[0].Remove(market[0].Length - 1);
-
-                double mc = Convert.ToDouble(marketcap);
-
-                if (mult == 'M')
-                    mc = mc * 1000000;
-
-                if (mult == 'B')
-                    mc = mc * 1000000000;
-
-                mult = volume[volume.Length - 1];
-                volume.Remove(volume.Length - 1);
-                double vol = Convert.ToDouble(volume);
-
-                if (mult == 'M')
-                    vol = vol * 1000000;
-
-                if (mult == 'B')
-                    vol = vol * 1000000000;
-
-                MarketData data = new MarketData(name, Convert.ToDouble(price), mc, Convert.ToDouble(range[2]), Convert.ToDouble(range[0]), vol);
-
-                return data;
-
+                catch (Exception)
+                {
+                }
             }
-            catch (Exception) { }
-
-            MarketData md = new MarketData("", 0, 0, 0, 0, 0);
-            return md;
+            return marketData;
         }
     }
 }
