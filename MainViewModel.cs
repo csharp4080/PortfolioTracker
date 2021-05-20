@@ -49,10 +49,10 @@ namespace PortfolioTracker
             {
                 new GoogleFetcher()
             };
-            //CryptoFetchers = new List<ITickerFetcher>
-            //{
-            //    new CoinGeckoFetcher()
-            //};
+            CryptoFetchers = new List<ITickerFetcher>
+            {
+                new CoinGeckoFetcher()
+            };
             // TODO: add more to support all relevant stocks / crypto
         }
 
