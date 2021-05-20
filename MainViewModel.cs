@@ -42,7 +42,7 @@ namespace PortfolioTracker
             SaveFilePath = saveFilePath;
             TrackedTickers = new ObservableCollection<Ticker>();
             // Attempt To Load Previously Saved State Information
-            //LoadDataFile();
+            LoadDataFile();
             // Register Ticker Fetchers
             TickerFetchers = new List<ITickerFetcher>();
             TickerFetchers.Add(new GoogleFetcher());
