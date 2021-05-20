@@ -47,9 +47,18 @@ namespace PortfolioTracker
 
         private async void ButtonSaveNewTicker_Click(object sender, RoutedEventArgs e)
         {
-            Ticker ticker = new Ticker(TextBoxNewTickerSymbol.Text);
+            AssetType type;
+            if ((bool) RadioOptionStock.IsChecked)
+            {
+                type = AssetType.STOCK;
+            }
+            else
+            {
+                type = AssetType.CRYPTO;
+            }
+            Ticker ticker = new Ticker(TextBoxNewTickerSymbol.Text, type);
             ticker.Ownership = Double.Parse(TextBoxNewTickerShare.Text);
-            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(ticker.Symbol))
+            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(ticker.Symbol, ticker.Type))
             {
                 ViewModel.TrackedTickers.Add(ticker);
                 ExitNewTickerView();
@@ -74,8 +83,8 @@ namespace PortfolioTracker
             TickerSymbol.Content = selected.Symbol;
             TickerName.Content = "";
             TickerPrice.Content = "";
-            TickerName.Content = await ViewModel.GetName(selected.Symbol);
-            TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol):0.00}";
+            TickerName.Content = await ViewModel.GetName(selected.Symbol, selected.Type);
+            TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol, selected.Type):0.00}";
         }
 
         private void PortfolioTracker_Closing(object sender, System.ComponentModel.CancelEventArgs e)

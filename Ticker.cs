@@ -11,15 +11,18 @@ namespace PortfolioTracker
     /// </summary>
     public class Ticker
     {
-        public String Symbol { get; set; }
+        public string Symbol { get; private set; }
+
+        public AssetType Type { get; private set; }
 
         public double Price { get; set; }
 
         public double Ownership { get; set; }
 
-        public Ticker(String symbol)
+        public Ticker(string symbol, AssetType type)
         {
             Symbol = symbol;
+            Type = type;
         }
 
         public override bool Equals(object obj)
@@ -29,12 +32,12 @@ namespace PortfolioTracker
                 return false;
             }
             Ticker other = obj as Ticker;
-            return Symbol == other.Symbol;
+            return Symbol == other.Symbol && Type == other.Type;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Symbol);
+            return HashCode.Combine(Symbol, Type);
         }
     }
 }

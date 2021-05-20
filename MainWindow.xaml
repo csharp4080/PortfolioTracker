@@ -59,6 +59,9 @@
             <Label x:Name="LabelNewTickerSymbol" Content="Symbol:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Height="30" FontSize="16" Width="68"/>
             <Label x:Name="LabelNewTickerShare" Content="Share:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Height="30" FontSize="16" Width="68"/>
             <TextBox x:Name="TextBoxNewTickerShare" Margin="80,107,10,0" Text="0.0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" FontSize="16" TextAlignment="Left" MaxLines="1"/>
+            <Label x:Name="LabelNewTickerType" Content="Type:&#xD;&#xA;&#xA;" HorizontalAlignment="Left" Margin="10,139,0,0" VerticalAlignment="Top" Height="30" FontSize="16" Width="68"/>
+            <RadioButton x:Name="RadioOptionStock" Content="Stock" HorizontalAlignment="Left" Margin="78,147,0,0" VerticalAlignment="Top" IsChecked="True"/>
+            <RadioButton x:Name="RadioOptionCrypto" Content="Crypto" HorizontalAlignment="Left" Margin="131,147,0,0" VerticalAlignment="Top"/>
         </Grid>
     </Grid>
 </Window>

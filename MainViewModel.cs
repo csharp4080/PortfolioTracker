@@ -20,7 +20,8 @@ namespace PortfolioTracker
         public ObservableCollection<Ticker> TrackedTickers { get; private set; }
 
         // Ticker Data Sources
-        private List<ITickerFetcher> TickerFetchers;
+        private List<ITickerFetcher> StockFetchers;
+        private List<ITickerFetcher> CryptoFetchers;
 
         /// <summary>
         ///     <para>
@@ -44,9 +45,14 @@ namespace PortfolioTracker
             // Attempt To Load Previously Saved State Information
             LoadDataFile();
             // Register Ticker Fetchers
-            TickerFetchers = new List<ITickerFetcher>();
-            TickerFetchers.Add(new GoogleFetcher());
-            TickerFetchers.Add(new CoinGeckoFetcher());
+            StockFetchers = new List<ITickerFetcher>
+            {
+                new GoogleFetcher()
+            };
+            CryptoFetchers = new List<ITickerFetcher>
+            {
+                new CoinGeckoFetcher()
+            };
             // TODO: add more to support all relevant stocks / crypto
         }
 
@@ -93,10 +99,16 @@ namespace PortfolioTracker
         ///     True if a fetcher is capable of getting
         ///     information for this ticker.
         /// </returns>
-        public async Task<bool> Supports(string ticker)
+        public async Task<bool> Supports(string ticker, AssetType type)
         {
+            List<ITickerFetcher> sources = type switch
+            {
+                AssetType.STOCK => StockFetchers,
+                AssetType.CRYPTO => CryptoFetchers,
+                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
+            };
             // Check Each Fetcher Until One Supports The Ticker
-            foreach (ITickerFetcher fetcher in TickerFetchers)
+            foreach (ITickerFetcher fetcher in sources)
             {
                 if (await fetcher.Supports(ticker))
                 {
@@ -117,10 +129,16 @@ namespace PortfolioTracker
         ///     A Task holding the price of the given ticker if
         ///     found, throws TickerNotFoundException if not found.
         /// </returns>
-        public async Task<double> GetPrice(string ticker)
+        public async Task<double> GetPrice(string ticker, AssetType type)
         {
+            List<ITickerFetcher> sources = type switch
+            {
+                AssetType.STOCK => StockFetchers,
+                AssetType.CRYPTO => CryptoFetchers,
+                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
+            };
             // Check Each Fetcher Until One Supports The Ticker
-            foreach (ITickerFetcher fetcher in TickerFetchers)
+            foreach (ITickerFetcher fetcher in sources)
             {
                 if (await fetcher.Supports(ticker))
                 {
@@ -142,10 +160,16 @@ namespace PortfolioTracker
         ///     A Task holding the price of the given ticker if
         ///     found, throws TickerNotFoundException if not found.
         /// </returns>
-        public async Task<string> GetName(string ticker)
+        public async Task<string> GetName(string ticker, AssetType type)
         {
+            List<ITickerFetcher> sources = type switch
+            {
+                AssetType.STOCK => StockFetchers,
+                AssetType.CRYPTO => CryptoFetchers,
+                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
+            };
             // Check Each Fetcher Until One Supports The Ticker
-            foreach (ITickerFetcher fetcher in TickerFetchers)
+            foreach (ITickerFetcher fetcher in sources)
             {
                 if (await fetcher.Supports(ticker))
                 {
