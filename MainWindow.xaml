@@ -43,8 +43,8 @@
             <Label x:Name="TickerSymbol" Content="Ticker" Margin="10,103,10,0" VerticalAlignment="Top" Foreground="#FFA0A0A0" Width="460" Height="26" HorizontalAlignment="Left"/>
             <Label x:Name="TickerPrice" Content="$0.00" HorizontalAlignment="Left" Margin="345,69,0,0" VerticalAlignment="Top" Height="34" Width="125" Foreground="Red" FontSize="18"/>
             <Label x:Name="LabelYourShares" Content="Your Shares" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" FontSize="18" Width="225" Height="34"/>
-            <Label x:Name="TickerPrice_Copy" Content="$0.00" HorizontalAlignment="Left" Margin="345,149,0,0" VerticalAlignment="Top" Height="34" Width="125" Foreground="Red" FontSize="18"/>
-            <Label x:Name="LabelYourPortfolioAmount" Content="0.0" Margin="10,183,10,0" VerticalAlignment="Top" Foreground="#FFA0A0A0" Width="460" Height="26" HorizontalAlignment="Left"/>
+            <Label x:Name="ShareValue" Content="$0.00" HorizontalAlignment="Left" Margin="345,149,0,0" VerticalAlignment="Top" Height="34" Width="125" Foreground="Red" FontSize="18"/>
+            <Label x:Name="YourPortfolioAmount" Content="0.0" Margin="10,183,10,0" VerticalAlignment="Top" Foreground="#FFA0A0A0" Width="460" Height="26" HorizontalAlignment="Left"/>
             <Separator Margin="10,214,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Background="#FF323232"/>
             <Separator Margin="10,134,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Background="#FF323232"/>
             <Label x:Name="LabelStats" Content="Stats" HorizontalAlignment="Left" Margin="10,229,0,0" VerticalAlignment="Top" FontSize="18" Width="460" Height="34"/>

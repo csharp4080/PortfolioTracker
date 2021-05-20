@@ -89,6 +89,11 @@ namespace PortfolioTracker
             TickerSymbol.Content = "";
             TickerName.Content = "";
             TickerPrice.Content = "";
+            YourPortfolioAmount.Content = "";
+            MarketCap.Content = "";
+            Volume.Content = "";
+            DayLow.Content = "";
+            DayHigh.Content = "";
             // If None Selected Leave Blank
             if (lstTickers.SelectedIndex < 0)
             {
@@ -97,9 +102,11 @@ namespace PortfolioTracker
             // Otherwise Get New Info
             Ticker ticker = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
             TickerSymbol.Content = ticker.Symbol;
+            YourPortfolioAmount.Content = ticker.Ownership;
             MarketData tickerData = await ViewModel.GetMarketData(ticker.Symbol, ticker.Type);
             TickerName.Content = tickerData.name;
             TickerPrice.Content = $"${tickerData.price:0.00}";
+            ShareValue.Content = $"${tickerData.price * ticker.Ownership:0.00}";
             MarketCap.Content = $"${tickerData.marketcap:0.00}";
             Volume.Content = $"${tickerData.tradingvolume:0.00}";
             DayLow.Content = $"${tickerData.dayrangelow:0.00}";
