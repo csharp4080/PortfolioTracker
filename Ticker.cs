@@ -32,7 +32,8 @@ namespace PortfolioTracker
                 return false;
             }
             Ticker other = obj as Ticker;
-            return Symbol == other.Symbol && Type == other.Type;
+            return Symbol.Equals(other.Symbol, StringComparison.CurrentCultureIgnoreCase)
+                && Type == other.Type;
         }
 
         public override int GetHashCode()

@@ -52,10 +52,21 @@ namespace PortfolioTracker
             }
             Ticker ticker = new Ticker(TextBoxNewTickerSymbol.Text, type);
             ticker.Ownership = Double.Parse(TextBoxNewTickerShare.Text);
-            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(ticker.Symbol, ticker.Type))
+            if (ViewModel.TrackedTickers.Contains(ticker))
+            {
+                ticker = ViewModel.TrackedTickers.Where(t => t.Equals(ticker)).First();
+                ticker.Ownership = Double.Parse(TextBoxNewTickerShare.Text);
+                ExitNewTickerView();
+            }
+            else if (await ViewModel.Supports(ticker.Symbol, ticker.Type))
             {
                 ViewModel.TrackedTickers.Add(ticker);
                 ExitNewTickerView();
+            }
+            else
+            {
+                TextBoxNewTickerSymbol.BorderBrush = Brushes.DarkRed;
+                TextBoxNewTickerSymbol.Foreground = Brushes.Red;
             }
         }
 
@@ -73,8 +84,11 @@ namespace PortfolioTracker
 
         private void ExitNewTickerView()
         {
-            // Close New Ticker View
+            // Disable & Reset Controls
             AddTicker.IsEnabled = false;
+            TextBoxNewTickerSymbol.Text = "";
+            TextBoxNewTickerShare.Text = "";
+            // Close New Ticker View
             AddTicker.Visibility = Visibility.Hidden;
             // Open Market View
             MarketData.Visibility = Visibility.Visible;
@@ -118,19 +132,6 @@ namespace PortfolioTracker
             ViewModel.SaveDataFile();
         }
 
-        private void RemoveTicker(Ticker ticker)
-        {
-            if (ticker != null)
-            {
-                ViewModel.TrackedTickers.Remove(ticker);
-            }
-        }
-
-        private void ModifyTicker(object sender, RoutedEventArgs e)
-        {
-            EnterNewTickerView();
-        }
-
         private void ButtonRemoveTicker_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -140,7 +141,32 @@ namespace PortfolioTracker
 
         private void ButtonModifyTicker_Click(object sender, RoutedEventArgs e)
         {
+            Button button = sender as Button;
+            Ticker ticker = ViewModel.TrackedTickers[lstTickers.Items.IndexOf(button.DataContext)];
+            TextBoxNewTickerSymbol.Text = ticker.Symbol;
+            if (ticker.Type == AssetType.STOCK)
+            {
+                RadioOptionStock.IsChecked = true;
+            }
+            else
+            {
+                RadioOptionCrypto.IsChecked = true;
+            }
+            EnterNewTickerView();
+        }
 
+        private void TextBoxNewTickerSymbol_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBoxNewTickerSymbol.BorderBrush = Brushes.Black;
+            TextBoxNewTickerSymbol.Foreground = Brushes.Black;
+            TextBox textBox = sender as TextBox;
+            Ticker t = new Ticker(textBox.Text, (bool) RadioOptionStock.IsChecked ? AssetType.STOCK : AssetType.CRYPTO);
+            Ticker ticker = ViewModel.TrackedTickers.Where(ticker => ticker.Equals(t)).FirstOrDefault();
+            if (ticker == null)
+            {
+                return;
+            }
+            TextBoxNewTickerShare.Text = "" + ticker.Ownership;
         }
     }
 }
