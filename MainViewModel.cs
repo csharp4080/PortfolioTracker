@@ -42,11 +42,11 @@ namespace PortfolioTracker
             SaveFilePath = saveFilePath;
             TrackedTickers = new ObservableCollection<Ticker>();
             // Attempt To Load Previously Saved State Information
-            LoadDataFile();
+            //LoadDataFile();
             // Register Ticker Fetchers
             TickerFetchers = new List<ITickerFetcher>();
-            TickerFetchers.Add(new CoinGeckoFetcher());
             TickerFetchers.Add(new GoogleFetcher());
+            TickerFetchers.Add(new CoinGeckoFetcher());
             // TODO: add more to support all relevant stocks / crypto
         }
 
