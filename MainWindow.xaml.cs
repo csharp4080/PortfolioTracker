@@ -97,9 +97,13 @@ namespace PortfolioTracker
             // Otherwise Get New Info
             Ticker ticker = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
             TickerSymbol.Content = ticker.Symbol;
-            MarketData TickerData = await ViewModel.GetMarketData(ticker.Symbol, ticker.Type);
-            TickerName.Content = TickerData.name;
-            TickerPrice.Content = TickerData.price;
+            MarketData tickerData = await ViewModel.GetMarketData(ticker.Symbol, ticker.Type);
+            TickerName.Content = tickerData.name;
+            TickerPrice.Content = $"${tickerData.price:0.00}";
+            MarketCap.Content = $"${tickerData.marketcap:0.00}";
+            Volume.Content = $"${tickerData.tradingvolume:0.00}";
+            DayLow.Content = $"${tickerData.dayrangelow:0.00}";
+            DayHigh.Content = $"${tickerData.dayrangehigh:0.00}";
         }
 
         private void PortfolioTracker_Closing(object sender, System.ComponentModel.CancelEventArgs e)
