@@ -12,72 +12,129 @@ namespace PortfolioTracker.TickerFetchers
     class GoogleFetcher : ITickerFetcher
     {
         private const string URL = "https://www.google.com/finance/quote/";
-        private readonly string[] exchanges = { "NASDAQ", "NYSE" };
+        //private readonly string[] exchanges = { "NASDAQ", "NYSE" };
 
         public async Task<bool> Supports(string ticker)
         {
-            foreach (string exchange in exchanges)
+
+            try
             {
-                try
+                //Check NASDAQ first
+                HttpClient httpClient = new HttpClient();
+                string request = $"{URL}{ticker}:NASDAQ";
+                var html = await httpClient.GetStringAsync(request);
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html);
+                var check = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']");
+
+                //If NASDAQ fails, check NYSE
+                if (check == null)
                 {
-                    HttpClient httpClient = new HttpClient();
-                    string request = $"{URL}{ticker}:{exchange}";
-                    var html = await httpClient.GetStringAsync(request);
-                    var htmlDoc = new HtmlDocument();
+                    request = $"{URL}{ticker}:NYSE";
+                    html = await httpClient.GetStringAsync(request);
+                    htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(html);
-                    string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
+
+                    check = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']");
+
+                    //If both NASDAQ and NYSE fail, then the stock is invalid
+                    if (check == null)
+                        return false;
+
+                    else
+                        return true;
+                }
+
+                else
                     return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
             }
+            catch (Exception) { }
+
             return false;
         }
 
         public async Task<double> GetPrice(string ticker)
         {
-            foreach (string exchange in exchanges)
+            try
             {
-                try
+                //Check NASDAQ first
+                HttpClient httpClient = new HttpClient();
+                string request = $"{URL}{ticker}:NASDAQ";
+                var html = await httpClient.GetStringAsync(request);
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html);
+                var check = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']");
+
+                //If NASDAQ fails, check NYSE
+                if (check == null)
                 {
-                    HttpClient httpClient = new HttpClient();
-                    string request = $"{URL}{ticker}:{exchange}";
-                    var html = await httpClient.GetStringAsync(request);
-                    var htmlDoc = new HtmlDocument();
+                    request = $"{URL}{ticker}:NYSE";
+                    html = await httpClient.GetStringAsync(request);
+                    htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(html);
+
+                    //Pull price as string
                     string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
-                    double dblprice = Convert.ToDouble(price);
-                    return dblprice;
+
+                    //Remove the $ from string
+                    price = price.Remove(0, 1);
+
+                    //Return price as double
+                    return Convert.ToDouble(price);
                 }
-                catch (Exception)
+
+                else
                 {
-                    return 0.0;
+                    //Pull price as string
+                    string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
+
+                    //Remove the $ from string
+                    price = price.Remove(0, 1);
+
+                    //Return price as double
+                    return Convert.ToDouble(price);
                 }
+                    
             }
+            catch (Exception) { }
+
             return 0.0;
         }
 
         public async Task<string> GetName(string ticker)
         {
-            foreach (string exchange in exchanges)
+            try
             {
-                try
+                //Check NASDAQ first
+                HttpClient httpClient = new HttpClient();
+                string request = $"{URL}{ticker}:NASDAQ";
+                var html = await httpClient.GetStringAsync(request);
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html);
+                var check = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']");
+
+                //If NASDAQ fails, check NYSE
+                if (check == null)
                 {
-                    HttpClient httpClient = new HttpClient();
-                    string request = $"{URL}{ticker}:{exchange}";
-                    var html = await httpClient.GetStringAsync(request);
-                    var htmlDoc = new HtmlDocument();
+                    request = $"{URL}{ticker}:NYSE";
+                    html = await httpClient.GetStringAsync(request);
+                    htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(html);
+
                     string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
+
                     return name;
                 }
-                catch (Exception)
+
+                else
                 {
-                    return "Error";
+                    string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
+
+                    return name;
                 }
             }
+            catch (Exception) { }
+
             return "Error";
         }
     }
