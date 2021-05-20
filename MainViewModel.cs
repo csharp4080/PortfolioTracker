@@ -64,6 +64,7 @@ namespace PortfolioTracker
                 if(s != null)
                     TrackedTickers = JsonSerializer.Deserialize<ObservableCollection<Ticker>>(s);
             }
+
             // read file at SaveFilePath, load settings
             // ex. read tracked tickers/holdings from file, add into TrackedTickers mapping
         }
@@ -73,11 +74,9 @@ namespace PortfolioTracker
         /// </summary>
         public void SaveDataFile()
         {
-            StreamWriter sw = File.CreateText(SaveFilePath);
-
             string s = JsonSerializer.Serialize<ObservableCollection<Ticker>>(TrackedTickers);
 
-            sw.WriteLine(s);
+            File.WriteAllText(SaveFilePath, s);
 
             // save settings into file at SaveFilePath to read at next startup
             // ex. for each tracked ticker/amount, save into file
