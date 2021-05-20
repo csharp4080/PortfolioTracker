@@ -30,19 +30,35 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Label Content="Tickers" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22" HorizontalAlignment="Left" Height="39" Width="76"/>
-            <Button Grid.Row="2" x:Name="ButtonAddTicker" Click="ButtonAddTicker_Click" Content="Add +" Margin="10,0,10,0" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="0,4,0,4" Height="29"/>
+            <Button Grid.Row="2" x:Name="ButtonAddTicker" Click="ButtonAddTicker_Click" Content="Add +" Margin="10,0,10,10" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Padding="0,4,0,4" Height="29"/>
             <Separator Margin="10,54,10,0" HorizontalContentAlignment="Left" Background="#FF323232" Height="10" VerticalAlignment="Top"/>
         </Grid>
-        <Grid Name="MarketData" Grid.Column="1">
+        <Grid Name="MarketData" Grid.Column="1" Visibility="Hidden">
             <Label Grid.Row="0" Content="Market Activity&#xA;" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22" Height="39" HorizontalAlignment="Left" Width="460"/>
             <Separator Margin="10,54,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Grid.Row="1" HorizontalAlignment="Stretch" Background="#FF323232"/>
             <Label x:Name="TickerName" Content="Ticker Name" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontSize="18" Width="225"/>
             <Label x:Name="TickerSymbol" Content="Ticker" HorizontalAlignment="Stretch" Margin="10,103,10,0" VerticalAlignment="Top" Foreground="#FFA0A0A0" Width="460"/>
             <Label x:Name="TickerPrice" Content="$0.00" HorizontalAlignment="Left" Margin="240,69,0,0" VerticalAlignment="Top" Height="34" Width="230" Foreground="Red" FontSize="18"/>
         </Grid>
-        <Grid Name="AddTicker" Grid.Column="1" Visibility="Hidden">
+        <Grid Name="AddTicker" Grid.Column="1" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
             <Label Grid.Row="0" Content="Add / Modify Ticker&#xA;" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22" Height="39" HorizontalAlignment="Left" Width="460"/>
-            <Separator Margin="10,54,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Grid.Row="1" HorizontalAlignment="Stretch" Background="#FF323232"/>
+            <Separator Margin="10,54,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Grid.Row="0" HorizontalAlignment="Stretch" Background="#FF323232"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="ButtonCancelNewTicker" Content="Cancel" Margin="10,0,5,10" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Padding="0,4,0,4" Height="30" Grid.Column="0" Click="ButtonCancelNewTicker_Click"/>
+                <Button x:Name="ButtonSaveNewTicker" Content="Save" Margin="5,0,10,10" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Padding="0,4,0,4" Height="29" Grid.Column="1" Click="ButtonSaveNewTicker_Click"/>
+            </Grid>
+            <TextBox x:Name="TextBoxNewTickerSymbol" Margin="80,72,10,0" Text="VTC" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" FontSize="16" TextAlignment="Left" MaxLines="1"/>
+            <Label x:Name="LabelNewTickerSymbol" Content="Symbol:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Height="30" FontSize="16" Width="68"/>
+            <Label x:Name="LabelNewTickerShare" Content="Share:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Height="30" FontSize="16" Width="68"/>
+            <TextBox x:Name="TextBoxNewTickerShare" Margin="80,107,10,0" Text="0.0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" FontSize="16" TextAlignment="Left" MaxLines="1"/>
         </Grid>
     </Grid>
 </Window>

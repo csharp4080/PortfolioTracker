@@ -28,21 +28,52 @@ namespace PortfolioTracker
             InitializeComponent();
         }
 
-        int test = 0;
-        private async void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            string symbol = (test++ % 2 == 0) ? "GME" : "F";
-            Ticker ticker = new Ticker(symbol);
-            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(symbol))
+            // Disable Add Button
+            ButtonAddTicker.IsEnabled = false;
+            // Close Market View
+            MarketData.IsEnabled = false;
+            MarketData.Visibility = Visibility.Hidden;
+            // Open New Ticker View
+            AddTicker.Visibility = Visibility.Visible;
+            AddTicker.IsEnabled = true;
+        }
+
+        private void ButtonCancelNewTicker_Click(object sender, RoutedEventArgs e)
+        {
+            ExitNewTickerView();
+        }
+
+        private async void ButtonSaveNewTicker_Click(object sender, RoutedEventArgs e)
+        {
+            Ticker ticker = new Ticker(TextBoxNewTickerSymbol.Text);
+            ticker.Ownership = Double.Parse(TextBoxNewTickerShare.Text);
+            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(ticker.Symbol))
             {
                 ViewModel.TrackedTickers.Add(ticker);
+                ExitNewTickerView();
             }
+        }
+
+        private void ExitNewTickerView()
+        {
+            // Close New Ticker View
+            AddTicker.IsEnabled = false;
+            AddTicker.Visibility = Visibility.Hidden;
+            // Open Market View
+            MarketData.Visibility = Visibility.Visible;
+            MarketData.IsEnabled = true;
+            // Re-enable Add Button
+            ButtonAddTicker.IsEnabled = true;
         }
 
         private async void lstTickers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Ticker selected = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
             TickerSymbol.Content = selected.Symbol;
+            TickerName.Content = "";
+            TickerPrice.Content = "";
             TickerName.Content = await ViewModel.GetName(selected.Symbol);
             TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol):0.00}";
         }
