@@ -30,7 +30,6 @@ namespace PortfolioTracker.TickerFetchers
                 }
                 catch (Exception)
                 {
-                    return false;
                 }
             }
             return false;
@@ -53,7 +52,6 @@ namespace PortfolioTracker.TickerFetchers
                 }
                 catch (Exception)
                 {
-                    return 0.0;
                 }
             }
             return 0.0;
@@ -75,7 +73,6 @@ namespace PortfolioTracker.TickerFetchers
                 }
                 catch (Exception)
                 {
-                    return "Error";
                 }
             }
             return "Error";
