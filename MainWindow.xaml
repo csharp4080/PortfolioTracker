@@ -26,8 +26,8 @@
                                 <TextBlock Text="{Binding Symbol}"/>
                                 <TextBlock Text="{Binding Price}"/>
                             </StackPanel>
-                            <Button Name="ButtonRemoveTicker" Command="RemoveTicker" CommandParameter="{Binding}" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
-                            <Button Name="ButtonModifyTicker" Command="ModifyTicker" CommandParameter="{Binding}" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <Button Name="ButtonRemoveTicker" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <Button Name="ButtonModifyTicker" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
