@@ -76,27 +76,41 @@ namespace PortfolioTracker.TickerFetchers
                 string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
                 string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
 
-                var node = htmlDoc.DocumentNode.SelectSingleNode("//h2[@class'yV3rjd']");
+                HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//div[@class='P6K39c']");
 
-                node = node.NextSibling;
-                node = node.NextSibling;
+                string dayrange = nodes[6].InnerText;
+                string marketcap = nodes[8].InnerText;
+                string volume = nodes[9].InnerText;
 
-                string dayrange = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+                price = price.Remove(0, 1);
 
-                node = node.NextSibling;
-                node = node.NextSibling;
+                string[] range = dayrange.Split(' ');
+                range[0].Remove(0, 1);
+                range[2].Remove(0, 1);
 
-                string marketcap = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+                string[] market = marketcap.Split(' ');
+                char mult = market[0][market[0].Length];
+                string marketprice = market[0].Remove(market[0].Length - 1);
 
-                node = node.NextSibling;
+                double mp = Convert.ToDouble(marketprice);
 
-                string volume = node.SelectSingleNode("//div[@class='P6K39c']").InnerText;
+                if (mult == 'M')
+                    mp = mp * 1000000;
 
+                if (mult == 'B')
+                    mp = mp * 1000000000;
+
+
+
+
+                MarketData md = new MarketData(name, Convert.ToDouble(price), );
+
+                return md;
 
             }
             catch (Exception) { }
 
-            MarketData md = new MarketData("", 0, 0, 0, 0, 0);
+            MarketData md = new MarketData("asdfasdf", 0, 0, 0, 0, 0);
             return md;
         }
     }

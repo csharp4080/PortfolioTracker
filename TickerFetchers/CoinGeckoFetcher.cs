@@ -30,6 +30,23 @@ namespace PortfolioTracker.TickerFetchers
             return await GetListing(ticker) != null;
         }
 
+
+        public async Task<MarketData> GetMarketData(string ticker)
+        {
+            CoinGeckoListing listing = await GetListing(ticker);
+            if (listing == null)
+            {
+            //    return 0.0;
+            }
+            HttpClient httpClient = new HttpClient();
+            string request = $"{API_URL}/coins/{listing.ID}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+            JsonDocument response = JsonDocument.Parse(await httpClient.GetStringAsync(request));
+            //return response.RootElement.GetProperty("market_data").GetProperty("current_price").GetProperty("usd").GetDouble();
+
+            MarketData md = new MarketData("", 0, 0, 0, 0, 0);
+
+            return md;
+        }
         public async Task<double> GetPrice(string ticker)
         {
             CoinGeckoListing listing = await GetListing(ticker);

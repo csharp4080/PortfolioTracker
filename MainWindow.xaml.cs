@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PortfolioTracker.TickerFetchers;
 
 namespace PortfolioTracker
 {
@@ -91,8 +92,9 @@ namespace PortfolioTracker
             // Otherwise Get New Info
             Ticker ticker = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
             TickerSymbol.Content = ticker.Symbol;
-            TickerName.Content = await ViewModel.GetName(ticker.Symbol, ticker.Type);
-            TickerPrice.Content = $"${await ViewModel.GetPrice(ticker.Symbol, ticker.Type):0.00}";
+            MarketData TickerData = await ViewModel.GetMarketData(ticker.Symbol, ticker.Type);
+            TickerName.Content = TickerData.name;
+            TickerPrice.Content = TickerData.price;
         }
 
         private void PortfolioTracker_Closing(object sender, System.ComponentModel.CancelEventArgs e)

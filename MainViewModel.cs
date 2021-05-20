@@ -49,10 +49,10 @@ namespace PortfolioTracker
             {
                 new GoogleFetcher()
             };
-            CryptoFetchers = new List<ITickerFetcher>
-            {
-                new CoinGeckoFetcher()
-            };
+            //CryptoFetchers = new List<ITickerFetcher>
+            //{
+            //    new CoinGeckoFetcher()
+            //};
             // TODO: add more to support all relevant stocks / crypto
         }
 
@@ -124,17 +124,17 @@ namespace PortfolioTracker
         }
 
         /// <summary>
-        ///     Check all available sources for the price of the
-        ///     given ticker.
+        ///     Check all available sources for the market data
+        ///     of the given ticker.
         /// </summary>
         /// <param name="ticker">
-        ///     The name of the ticker to search the price of.
+        ///     The name of the ticker to search the data of.
         /// </param>
         /// <returns>
-        ///     A Task holding the price of the given ticker if
+        ///     A Task holding the data of the given ticker if
         ///     found, throws TickerNotFoundException if not found.
         /// </returns>
-        public async Task<double> GetPrice(string ticker, AssetType type)
+        public async Task<MarketData> GetMarketData(string ticker, AssetType type)
         {
             List<ITickerFetcher> sources = GetSources(type);
             // Check Each Fetcher Until One Supports The Ticker
@@ -142,33 +142,7 @@ namespace PortfolioTracker
             {
                 if (await fetcher.Supports(ticker))
                 {
-                    return await fetcher.GetPrice(ticker);
-                }
-            }
-            // Error If Ticker Not Found From Any Source
-            throw new TickerNotFoundException($"Unsupported Ticker: {ticker}");
-        }
-
-        /// <summary>
-        ///     Check all available sources for the price of the
-        ///     given ticker.
-        /// </summary>
-        /// <param name="ticker">
-        ///     The name of the ticker to search the price of.
-        /// </param>
-        /// <returns>
-        ///     A Task holding the price of the given ticker if
-        ///     found, throws TickerNotFoundException if not found.
-        /// </returns>
-        public async Task<string> GetName(string ticker, AssetType type)
-        {
-            List<ITickerFetcher> sources = GetSources(type);
-            // Check Each Fetcher Until One Supports The Ticker
-            foreach (ITickerFetcher fetcher in sources)
-            {
-                if (await fetcher.Supports(ticker))
-                {
-                    return await fetcher.GetName(ticker);
+                    return await fetcher.GetMarketData(ticker);
                 }
             }
             // Error If Ticker Not Found From Any Source
