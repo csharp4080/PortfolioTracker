@@ -94,7 +94,7 @@ namespace PortfolioTracker.TickerFetchers
                     //Return price as double
                     return Convert.ToDouble(price);
                 }
-                    
+
             }
             catch (Exception) { }
 
