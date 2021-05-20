@@ -20,8 +20,7 @@ namespace PortfolioTracker
             // Load Program State
             MainViewModel viewModel = new MainViewModel(SAVE_FILE_PATH);
             // Initialize GUI, Attach To State
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.ViewModel = viewModel;
+            MainWindow mainWindow = new MainWindow(viewModel);
             // Show GUI
             mainWindow.Show();
         }

@@ -20,28 +20,31 @@ namespace PortfolioTracker
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainViewModel ViewModel {set; get;}
-        public MainWindow()
+        public MainViewModel ViewModel {private set; get;}
+        public MainWindow(MainViewModel viewModel)
         {
+            ViewModel = viewModel;
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
         int test = 0;
         private async void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            string ticker = (test++ % 2 == 0) ? "BTC" : "VTC";
-            if (await ViewModel.Supports(ticker))
+            string symbol = (test++ % 2 == 0) ? "BTC" : "VTC";
+            Ticker ticker = new Ticker(symbol);
+            if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(symbol))
             {
-                lstTickers.Items.Add(ticker);
+                ViewModel.TrackedTickers.Add(ticker);
             }
         }
 
         private async void lstTickers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selected = (string) lstTickers.Items[lstTickers.SelectedIndex];
-            TickerSymbol.Content = selected;
-            TickerName.Content = await ViewModel.GetName(selected);
-            TickerPrice.Content = $"${await ViewModel.GetPrice(selected):0.00}";
+            Ticker selected = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
+            TickerSymbol.Content = selected.Symbol;
+            TickerName.Content = await ViewModel.GetName(selected.Symbol);
+            TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol):0.00}";
         }
     }
 }

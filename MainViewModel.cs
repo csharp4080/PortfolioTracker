@@ -1,6 +1,7 @@
 ﻿using PortfolioTracker.TickerFetchers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace PortfolioTracker
         public string SaveFilePath { get; private set; }
 
         // Keep Track Of Selected Assets & Amount User Holds (If Applicable)
-        public Dictionary<string, double> TrackedTickers { get; private set; }
+        public ObservableCollection<Ticker> TrackedTickers { get; private set; }
 
         // Ticker Data Sources
         private List<ITickerFetcher> TickerFetchers;
@@ -36,7 +37,7 @@ namespace PortfolioTracker
         {
             // Initialize To Empty State
             SaveFilePath = saveFilePath;
-            TrackedTickers = new Dictionary<string, double>();
+            TrackedTickers = new ObservableCollection<Ticker>();
             // Attempt To Load Previously Saved State Information
             LoadDataFile();
             // Register Ticker Fetchers

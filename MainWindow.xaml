@@ -17,7 +17,17 @@
                 <RowDefinition/>
                 <RowDefinition Height="76"/>
             </Grid.RowDefinitions>
-            <ListBox x:Name="lstTickers" SelectionChanged="lstTickers_SelectionChanged"  Background="{x:Null}" BorderBrush="{x:Null}" FontSize="14" Grid.RowSpan="2" Grid.Row="1"/>
+            <ListBox ItemsSource="{Binding TrackedTickers}" x:Name="lstTickers" SelectionChanged="lstTickers_SelectionChanged"  Background="{x:Null}" BorderBrush="{x:Null}" FontSize="14" Grid.RowSpan="2" Grid.Row="1">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Symbol}"/>
+                            <TextBlock Text="{Binding Price}"/>
+                            <TextBlock Text="{Binding Ownership}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <Label Content="Tickers" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22" HorizontalAlignment="Left" Height="39" Width="76"/>
             <Button Grid.Row="2" x:Name="ButtonAddTicker" Click="ButtonAddTicker_Click" Content="Add +" Margin="10,0,10,0" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="0,4,0,4" Height="29"/>
             <Separator Margin="10,54,10,0" HorizontalContentAlignment="Left" Background="#FF323232" Height="10" VerticalAlignment="Top"/>
