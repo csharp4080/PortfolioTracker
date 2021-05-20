@@ -31,7 +31,7 @@ namespace PortfolioTracker
         int test = 0;
         private async void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            string symbol = (test++ % 2 == 0) ? "BTC" : "F";
+            string symbol = (test++ % 2 == 0) ? "GME" : "F";
             Ticker ticker = new Ticker(symbol);
             if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(symbol))
             {
@@ -45,6 +45,11 @@ namespace PortfolioTracker
             TickerSymbol.Content = selected.Symbol;
             TickerName.Content = await ViewModel.GetName(selected.Symbol);
             TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol):0.00}";
+        }
+
+        private void PortfolioTracker_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ViewModel.SaveDataFile();
         }
     }
 }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PortfolioTracker"
         mc:Ignorable="d"
-        Title="Portfolio Tracker" Height="600" Width="800">
+        Title="Portfolio Tracker" Height="600" Width="800"
+        Closing="PortfolioTracker_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
