@@ -12,7 +12,7 @@ namespace PortfolioTracker.TickerFetchers
     class GoogleFetcher : ITickerFetcher
     {
         private const string URL = "https://www.google.com/finance/quote/";
-        private string[] exchanges = { "NASDAQ", "NYSE" };
+        private readonly string[] exchanges = { "NASDAQ", "NYSE" };
 
         public GoogleFetcher()
         {
