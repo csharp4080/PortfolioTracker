@@ -43,6 +43,7 @@ namespace PortfolioTracker
             // Register Ticker Fetchers
             TickerFetchers = new List<ITickerFetcher>();
             TickerFetchers.Add(new CoinGeckoFetcher());
+            TickerFetchers.Add(new GoogleFetcher());
             // TODO: add more to support all relevant stocks / crypto
         }
 

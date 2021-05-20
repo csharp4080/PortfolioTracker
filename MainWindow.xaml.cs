@@ -31,7 +31,7 @@ namespace PortfolioTracker
         int test = 0;
         private async void ButtonAddTicker_Click(object sender, RoutedEventArgs e)
         {
-            string symbol = (test++ % 2 == 0) ? "BTC" : "VTC";
+            string symbol = (test++ % 2 == 0) ? "BTC" : "F";
             Ticker ticker = new Ticker(symbol);
             if (!ViewModel.TrackedTickers.Contains(ticker) && await ViewModel.Supports(symbol))
             {

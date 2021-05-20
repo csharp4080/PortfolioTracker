@@ -14,11 +14,6 @@ namespace PortfolioTracker.TickerFetchers
         private const string URL = "https://www.google.com/finance/quote/";
         private readonly string[] exchanges = { "NASDAQ", "NYSE" };
 
-        public GoogleFetcher()
-        {
-
-        }
-
         public async Task<bool> Supports(string ticker)
         {
             foreach (string exchange in exchanges)
@@ -29,19 +24,15 @@ namespace PortfolioTracker.TickerFetchers
                     string request = $"{URL}{ticker}:{exchange}";
                     var html = await httpClient.GetStringAsync(request);
                     var htmlDoc = new HtmlDocument();
-
                     htmlDoc.LoadHtml(html);
-
                     string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
-
                     return true;
-
                 }
-
-                catch (Exception) { }
-
+                catch (Exception)
+                {
+                    return false;
+                }
             }
-
             return false;
         }
 
@@ -55,21 +46,16 @@ namespace PortfolioTracker.TickerFetchers
                     string request = $"{URL}{ticker}:{exchange}";
                     var html = await httpClient.GetStringAsync(request);
                     var htmlDoc = new HtmlDocument();
-
                     htmlDoc.LoadHtml(html);
-
                     string price = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='YMlKec fxKbKc']").InnerText;
-
                     double dblprice = Convert.ToDouble(price);
-
                     return dblprice;
-
                 }
-
-                catch (Exception) { }
-
+                catch (Exception)
+                {
+                    return 0.0;
+                }
             }
-
             return 0.0;
         }
 
@@ -83,19 +69,16 @@ namespace PortfolioTracker.TickerFetchers
                     string request = $"{URL}{ticker}:{exchange}";
                     var html = await httpClient.GetStringAsync(request);
                     var htmlDoc = new HtmlDocument();
-
                     htmlDoc.LoadHtml(html);
-
                     string name = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='KY7mAb']").InnerText;
-
                     return name;
                 }
-
-                catch (Exception) { }
-
+                catch (Exception)
+                {
+                    return "Error";
+                }
             }
-
-            return null;
+            return "Error";
         }
     }
 }
