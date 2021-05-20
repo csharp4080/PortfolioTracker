@@ -1,10 +1,13 @@
 ﻿using PortfolioTracker.TickerFetchers;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PortfolioTracker
 {
@@ -52,6 +55,15 @@ namespace PortfolioTracker
         /// </summary>
         private void LoadDataFile()
         {
+            if (File.Exists(SaveFilePath))
+            {
+                StreamReader sr = File.OpenText(SaveFilePath);
+
+                string s = sr.ReadLine();
+
+                if(s != null)
+                    TrackedTickers = JsonSerializer.Deserialize<ObservableCollection<Ticker>>(s);
+            }
             // read file at SaveFilePath, load settings
             // ex. read tracked tickers/holdings from file, add into TrackedTickers mapping
         }
@@ -61,6 +73,12 @@ namespace PortfolioTracker
         /// </summary>
         public void SaveDataFile()
         {
+            StreamWriter sw = File.CreateText(SaveFilePath);
+
+            string s = JsonSerializer.Serialize<ObservableCollection<Ticker>>(TrackedTickers);
+
+            sw.WriteLine(s);
+
             // save settings into file at SaveFilePath to read at next startup
             // ex. for each tracked ticker/amount, save into file
         }
