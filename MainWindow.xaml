@@ -33,14 +33,14 @@
             <Button Grid.Row="2" x:Name="ButtonAddTicker" Click="ButtonAddTicker_Click" Content="Add +" Margin="10,0,10,10" FontSize="14" Background="#FFC1C1C1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Padding="0,4,0,4" Height="29"/>
             <Separator Margin="10,54,10,0" HorizontalContentAlignment="Left" Background="#FF323232" Height="10" VerticalAlignment="Top"/>
         </Grid>
-        <Grid Name="MarketData" Grid.Column="1" Visibility="Hidden">
+        <Grid Name="MarketData" Grid.Column="1" Visibility="Visible">
             <Label Grid.Row="0" Content="Market Activity&#xA;" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="22" Height="39" HorizontalAlignment="Left" Width="460"/>
             <Separator Margin="10,54,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Height="10" Grid.Row="1" HorizontalAlignment="Stretch" Background="#FF323232"/>
             <Label x:Name="TickerName" Content="Ticker Name" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontSize="18" Width="225"/>
             <Label x:Name="TickerSymbol" Content="Ticker" HorizontalAlignment="Stretch" Margin="10,103,10,0" VerticalAlignment="Top" Foreground="#FFA0A0A0" Width="460"/>
             <Label x:Name="TickerPrice" Content="$0.00" HorizontalAlignment="Left" Margin="240,69,0,0" VerticalAlignment="Top" Height="34" Width="230" Foreground="Red" FontSize="18"/>
         </Grid>
-        <Grid Name="AddTicker" Grid.Column="1" Visibility="Visible">
+        <Grid Name="AddTicker" Grid.Column="1" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="50"/>
