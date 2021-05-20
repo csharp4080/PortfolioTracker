@@ -21,10 +21,13 @@
             <ListBox ItemsSource="{Binding TrackedTickers}" x:Name="lstTickers" SelectionChanged="lstTickers_SelectionChanged"  Background="{x:Null}" BorderBrush="{x:Null}" FontSize="14" Grid.RowSpan="2" Grid.Row="1">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Symbol}"/>
-                            <TextBlock Text="{Binding Price}"/>
-                            <TextBlock Text="{Binding Ownership}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Symbol}"/>
+                                <TextBlock Text="{Binding Price}"/>
+                            </StackPanel>
+                            <Button Name="ButtonRemoveTicker" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <Button Name="ButtonModifyTicker"  HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

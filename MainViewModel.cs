@@ -88,6 +88,16 @@ namespace PortfolioTracker
             // ex. for each tracked ticker/amount, save into file
         }
 
+        private List<ITickerFetcher> GetSources(AssetType type)
+        {
+            return type switch
+            {
+                AssetType.STOCK => StockFetchers,
+                AssetType.CRYPTO => CryptoFetchers,
+                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
+            };
+        }
+
         /// <summary>
         ///     Checks whether any of the current price fetching
         ///     sources supports the given ticker.
@@ -101,12 +111,7 @@ namespace PortfolioTracker
         /// </returns>
         public async Task<bool> Supports(string ticker, AssetType type)
         {
-            List<ITickerFetcher> sources = type switch
-            {
-                AssetType.STOCK => StockFetchers,
-                AssetType.CRYPTO => CryptoFetchers,
-                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
-            };
+            List<ITickerFetcher> sources = GetSources(type);
             // Check Each Fetcher Until One Supports The Ticker
             foreach (ITickerFetcher fetcher in sources)
             {
@@ -131,12 +136,7 @@ namespace PortfolioTracker
         /// </returns>
         public async Task<double> GetPrice(string ticker, AssetType type)
         {
-            List<ITickerFetcher> sources = type switch
-            {
-                AssetType.STOCK => StockFetchers,
-                AssetType.CRYPTO => CryptoFetchers,
-                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
-            };
+            List<ITickerFetcher> sources = GetSources(type);
             // Check Each Fetcher Until One Supports The Ticker
             foreach (ITickerFetcher fetcher in sources)
             {
@@ -162,12 +162,7 @@ namespace PortfolioTracker
         /// </returns>
         public async Task<string> GetName(string ticker, AssetType type)
         {
-            List<ITickerFetcher> sources = type switch
-            {
-                AssetType.STOCK => StockFetchers,
-                AssetType.CRYPTO => CryptoFetchers,
-                _ => throw new TickerNotFoundException($"Unsupported Type: {type}"),
-            };
+            List<ITickerFetcher> sources = GetSources(type);
             // Check Each Fetcher Until One Supports The Ticker
             foreach (ITickerFetcher fetcher in sources)
             {

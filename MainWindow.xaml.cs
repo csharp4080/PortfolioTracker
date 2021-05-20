@@ -79,17 +79,38 @@ namespace PortfolioTracker
 
         private async void lstTickers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Ticker selected = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
-            TickerSymbol.Content = selected.Symbol;
+            // Clear Old Values
+            TickerSymbol.Content = "";
             TickerName.Content = "";
             TickerPrice.Content = "";
-            TickerName.Content = await ViewModel.GetName(selected.Symbol, selected.Type);
-            TickerPrice.Content = $"${await ViewModel.GetPrice(selected.Symbol, selected.Type):0.00}";
+            // If None Selected Leave Blank
+            if (lstTickers.SelectedIndex < 0)
+            {
+                return;
+            }
+            // Otherwise Get New Info
+            Ticker ticker = lstTickers.Items[lstTickers.SelectedIndex] as Ticker;
+            TickerSymbol.Content = ticker.Symbol;
+            TickerName.Content = await ViewModel.GetName(ticker.Symbol, ticker.Type);
+            TickerPrice.Content = $"${await ViewModel.GetPrice(ticker.Symbol, ticker.Type):0.00}";
         }
 
         private void PortfolioTracker_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ViewModel.SaveDataFile();
+        }
+
+        private void ButtonRemoveTicker_Click(object sender, RoutedEventArgs e)
+        {
+            if (lstTickers.SelectedIndex >= 0)
+            {
+                ViewModel.TrackedTickers.RemoveAt(lstTickers.SelectedIndex);
+            }
+        }
+
+        private void ButtonModifyTicker_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
